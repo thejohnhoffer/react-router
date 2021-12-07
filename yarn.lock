@@ -7252,21 +7252,21 @@ __metadata:
   dependencies:
     history: ^5.1.0
     react: ^17.0.2
-    react-router: "https://github.com/thejohnhoffer/react-router.git#tag=noslash-v2.2&workspace=react-router"
+    react-router: "https://github.com/thejohnhoffer/react-router.git#tag=noslash-v3.1&workspace=react-router"
   peerDependencies:
     react: ">=16.8"
     react-dom: ">=16.8"
   languageName: unknown
   linkType: soft
 
-"react-router@https://github.com/thejohnhoffer/react-router.git#tag=noslash-v2.2&workspace=react-router":
+"react-router@https://github.com/thejohnhoffer/react-router.git#tag=noslash-v3.1&workspace=react-router":
   version: 6.0.2
-  resolution: "react-router@https://github.com/thejohnhoffer/react-router.git#workspace=react-router&commit=833a2b3d74aed1e322e4ce99f431716a838270a5"
+  resolution: "react-router@https://github.com/thejohnhoffer/react-router.git#workspace=react-router&commit=45fce5c48bc84f3f8cd8e72703e1977973e3dadb"
   dependencies:
     history: ^5.1.0
   peerDependencies:
     react: ">=16.8"
-  checksum: 5fc3ddd77e9324dc3b3017aa85b28fd8d4acf4a4f6ab6e554d12a2313a07cc50eed9d59c5371bccc200569cde16778a61803a9c80511804698d7d93cdec0a3ba
+  checksum: 7f055eda8ef5521d90827f390c411eddf7492fb5c963f63dc94628380f5e7e12ba5a14f78bbbc856107fde0bbf902cc342396724126b83bf13763be6a489c03c
   languageName: node
   linkType: hard
 

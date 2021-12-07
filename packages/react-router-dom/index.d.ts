@@ -32,9 +32,6 @@ export interface HistoryRouterProps {
     history: History;
 }
 export declare function HistoryRouter({ basename, children, history }: HistoryRouterProps): JSX.Element;
-export declare namespace HistoryRouter {
-    var displayName: string;
-}
 export interface LinkProps extends Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, "href"> {
     reloadDocument?: boolean;
     replace?: boolean;

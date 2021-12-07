@@ -1,5 +1,6 @@
 {
   "files": ["index.tsx"],
+  "exclude": [".*.d.ts"],
   "compilerOptions": {
     "lib": ["ES2020", "DOM"],
     "target": "ES2020",
@@ -10,7 +11,6 @@
     "jsx": "react",
 
     "declaration": true,
-    "typeRoots" : ["./typings"],
 
     "skipLibCheck": true,
 

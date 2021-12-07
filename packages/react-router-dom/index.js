@@ -79,9 +79,6 @@ export function HistoryRouter({ basename, children, history }) {
     React.useLayoutEffect(() => history.listen(setState), [history]);
     return (React.createElement(Router, { basename: basename, children: children, location: state.location, navigationType: state.action, navigator: history }));
 }
-if (__DEV__) {
-    HistoryRouter.displayName = "HistoryRouter";
-}
 function isModifiedEvent(event) {
     return !!(event.metaKey || event.altKey || event.ctrlKey || event.shiftKey);
 }
@@ -102,9 +99,6 @@ export const Link = React.forwardRef(function LinkWithRef({ onClick, reloadDocum
     // eslint-disable-next-line jsx-a11y/anchor-has-content
     React.createElement("a", { ...rest, href: href, onClick: handleClick, ref: ref, target: target }));
 });
-if (__DEV__) {
-    Link.displayName = "Link";
-}
 /**
  * A <Link> wrapper that knows if it's "active" or not.
  */
@@ -128,9 +122,6 @@ export const NavLink = React.forwardRef(function NavLinkWithRef({ "aria-current"
     let style = typeof styleProp === "function" ? styleProp({ isActive }) : styleProp;
     return (React.createElement(Link, { ...rest, "aria-current": ariaCurrent, className: className, ref: ref, style: style, to: to }));
 });
-if (__DEV__) {
-    NavLink.displayName = "NavLink";
-}
 ////////////////////////////////////////////////////////////////////////////////
 // HOOKS
 ////////////////////////////////////////////////////////////////////////////////

@@ -29,20 +29,11 @@ function warningOnce(key, cond, message) {
     }
 }
 const NavigationContext = React.createContext(null);
-if (__DEV__) {
-    NavigationContext.displayName = "Navigation";
-}
 const LocationContext = React.createContext(null);
-if (__DEV__) {
-    LocationContext.displayName = "Location";
-}
 const RouteContext = React.createContext({
     outlet: null,
     matches: []
 });
-if (__DEV__) {
-    RouteContext.displayName = "Route";
-}
 /**
  * A <Router> that stores all entries in memory.
  *
@@ -314,36 +305,6 @@ export function useRoutes(routes, locationArg) {
     let parentPathname = routeMatch ? routeMatch.pathname : "/";
     let parentPathnameBase = routeMatch ? routeMatch.pathnameBase : "/";
     let parentRoute = routeMatch && routeMatch.route;
-    if (__DEV__) {
-        // You won't get a warning about 2 different <Routes> under a <Route>
-        // without a trailing *, but this is a best-effort warning anyway since we
-        // cannot even give the warning unless they land at the parent route.
-        //
-        // Example:
-        //
-        // <Routes>
-        //   {/* This route path MUST end with /* because otherwise
-        //       it will never match /blog/post/123 */}
-        //   <Route path="blog" element={<Blog />} />
-        //   <Route path="blog/feed" element={<BlogFeed />} />
-        // </Routes>
-        //
-        // function Blog() {
-        //   return (
-        //     <Routes>
-        //       <Route path="post/:id" element={<Post />} />
-        //     </Routes>
-        //   );
-        // }
-        let parentPath = (parentRoute && parentRoute.path) || "";
-        warningOnce(parentPathname, !parentRoute || parentPath.endsWith("*"), `You rendered descendant <Routes> (or called \`useRoutes()\`) at ` +
-            `"${parentPathname}" (under <Route path="${parentPath}">) but the ` +
-            `parent route path has no trailing "*". This means if you navigate ` +
-            `deeper, the parent won't match anymore and therefore the child ` +
-            `routes will never render.\n\n` +
-            `Please change the parent <Route path="${parentPath}"> to <Route ` +
-            `path="${parentPath}/*">.`);
-    }
     let locationFromContext = useLocation();
     let location;
     if (locationArg) {
@@ -363,12 +324,6 @@ export function useRoutes(routes, locationArg) {
         ? pathname
         : pathname.slice(parentPathnameBase.length) || "/";
     let matches = matchRoutes(routes, { pathname: remainingPathname });
-    if (__DEV__) {
-        warning(parentRoute || matches != null, `No routes matched location "${location.pathname}${location.search}${location.hash}" `);
-        warning(matches == null ||
-            matches[matches.length - 1].route.element !== undefined, `Matched leaf route at location "${location.pathname}${location.search}${location.hash}" does not have an element. ` +
-            `This means it will render an <Outlet /> with a null value by default resulting in an "empty" page.`);
-    }
     return _renderMatches(matches &&
         matches.map(match => Object.assign({}, match, {
             params: Object.assign({}, parentParams, match.params),
