@@ -113,7 +113,7 @@ async function run() {
     ensureCleanWorkingDirectory();
 
     // 1. Get the next version number
-    let currentVersion = await getPackageVersion("react-router");
+    let currentVersion = await getPackageVersion("react-router-noslash");
     let version = semver.valid(givenVersion);
     if (version == null) {
       version = getNextVersion(currentVersion, givenVersion, prereleaseId);
@@ -127,27 +127,18 @@ async function run() {
     if (answer === false) return 0;
 
     // 3. Update react-router version
-    await updatePackageConfig("react-router", config => {
+    await updatePackageConfig("react-router-noslash", config => {
       config.version = version;
     });
     console.log(chalk.green(`  Updated react-router to version ${version}`));
 
     // 4. Update react-router-dom version + react-router dep
-    await updatePackageConfig("react-router-dom", config => {
+    await updatePackageConfig("react-router-dom-noslash", config => {
       config.version = version;
-      config.dependencies["react-router"] = version;
+      config.dependencies["react-router-noslash"] = version;
     });
     console.log(
       chalk.green(`  Updated react-router-dom to version ${version}`)
-    );
-
-    // 5. Update react-router-native version + react-router dep
-    await updatePackageConfig("react-router-native", config => {
-      config.version = version;
-      config.dependencies["react-router"] = version;
-    });
-    console.log(
-      chalk.green(`  Updated react-router-native to version ${version}`)
     );
 
     // 6. Update react-router and react-router-dom versions in the examples
@@ -157,8 +148,8 @@ async function run() {
       if (!stat.isDirectory()) continue;
 
       await updateExamplesPackageConfig(example, config => {
-        config.dependencies["react-router"] = version;
-        config.dependencies["react-router-dom"] = version;
+        config.dependencies["react-router-noslash"] = version;
+        config.dependencies["react-router-dom-noslash"] = version;
       });
     }
 

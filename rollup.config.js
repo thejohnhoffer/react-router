@@ -25,8 +25,8 @@ function getVersion(sourceDir) {
 }
 
 function reactRouter() {
-  const SOURCE_DIR = "packages/react-router";
-  const OUTPUT_DIR = "build/node_modules/react-router";
+  const SOURCE_DIR = "packages/react-router-noslash";
+  const OUTPUT_DIR = "build/node_modules/react-router-noslash";
   const version = getVersion(SOURCE_DIR);
 
   // JS modules for bundlers
@@ -212,8 +212,8 @@ function reactRouter() {
 }
 
 function reactRouterDom() {
-  const SOURCE_DIR = "packages/react-router-dom";
-  const OUTPUT_DIR = "build/node_modules/react-router-dom";
+  const SOURCE_DIR = "packages/react-router-dom-noslash";
+  const OUTPUT_DIR = "build/node_modules/react-router-dom-noslash";
   const version = getVersion(SOURCE_DIR);
 
   // JS modules for bundlers
@@ -226,7 +226,7 @@ function reactRouterDom() {
         sourcemap: !PRETTY,
         banner: createBanner("React Router DOM", version)
       },
-      external: ["history", "react", "react-dom", "react-router"],
+      external: ["history", "react", "react-dom", "react-router-noslash"],
       plugins: [
         babel({
           exclude: /node_modules/,
@@ -262,7 +262,7 @@ function reactRouterDom() {
         sourcemap: !PRETTY,
         banner: createBanner("React Router DOM", version)
       },
-      external: ["history", "react", "react-router"],
+      external: ["history", "react", "react-router-noslash"],
       plugins: [
         babel({
           exclude: /node_modules/,
@@ -288,7 +288,7 @@ function reactRouterDom() {
         sourcemap: !PRETTY,
         banner: createBanner("React Router DOM", version)
       },
-      external: ["history", "react", "react-router"],
+      external: ["history", "react", "react-router-noslash"],
       plugins: [
         babel({
           exclude: /node_modules/,
@@ -334,11 +334,11 @@ function reactRouterDom() {
         globals: {
           history: "HistoryLibrary",
           react: "React",
-          "react-router": "ReactRouter"
+          "react-router-noslash": "ReactRouter"
         },
         name: "ReactRouterDOM"
       },
-      external: ["history", "react", "react-router"],
+      external: ["history", "react", "react-router-noslash"],
       plugins: [
         babel({
           exclude: /node_modules/,
@@ -366,11 +366,11 @@ function reactRouterDom() {
         globals: {
           history: "HistoryLibrary",
           react: "React",
-          "react-router": "ReactRouter"
+          "react-router-noslash": "ReactRouter"
         },
         name: "ReactRouterDOM"
       },
-      external: ["history", "react", "react-router"],
+      external: ["history", "react", "react-router-noslash"],
       plugins: [
         babel({
           exclude: /node_modules/,
@@ -414,7 +414,7 @@ function reactRouterDom() {
         "history",
         "react",
         "react-dom/server",
-        "react-router-dom"
+        "react-router-dom-noslash"
       ],
       plugins: [
         babel({
@@ -441,7 +441,7 @@ function reactRouterDom() {
         "history",
         "react",
         "react-dom/server",
-        "react-router-dom"
+        "react-router-dom-noslash"
       ],
       plugins: [
         babel({
@@ -468,66 +468,10 @@ function reactRouterDom() {
   return [...modules, ...webModules, ...globals, ...node];
 }
 
-function reactRouterNative() {
-  const SOURCE_DIR = "packages/react-router-native";
-  const OUTPUT_DIR = "build/node_modules/react-router-native";
-  const version = getVersion(SOURCE_DIR);
-
-  const modules = [
-    {
-      input: `${SOURCE_DIR}/index.tsx`,
-      output: {
-        file: `${OUTPUT_DIR}/index.js`,
-        format: "esm",
-        sourcemap: !PRETTY,
-        banner: createBanner("React Router Native", version)
-      },
-      external: [
-        "@babel/runtime/helpers/esm/extends",
-        "@babel/runtime/helpers/esm/objectWithoutPropertiesLoose",
-        "@ungap/url-search-params",
-        "history",
-        "react",
-        "react-native",
-        "react-router"
-      ],
-      plugins: [
-        babel({
-          exclude: /node_modules/,
-          runtimeHelpers: true,
-          presets: [
-            [
-              "module:metro-react-native-babel-preset",
-              {
-                disableImportExportTransform: true,
-                enableBabelRuntime: false
-              }
-            ],
-            "@babel/preset-typescript"
-          ],
-          plugins: ["babel-plugin-dev-expression"],
-          extensions: [".ts", ".tsx"]
-        }),
-        copy({
-          targets: [
-            { src: `${SOURCE_DIR}/package.json`, dest: OUTPUT_DIR },
-            { src: `${SOURCE_DIR}/README.md`, dest: OUTPUT_DIR },
-            { src: "LICENSE.md", dest: OUTPUT_DIR }
-          ],
-          verbose: true
-        })
-      ].concat(PRETTY ? prettier({ parser: "babel" }) : [])
-    }
-  ];
-
-  return modules;
-}
-
 export default function rollup(options) {
   let builds = [
     ...reactRouter(options),
-    ...reactRouterDom(options),
-    ...reactRouterNative(options)
+    ...reactRouterDom(options)
   ];
 
   return builds;
