@@ -1,5 +1,5 @@
 {
-  "name": "react-router-native",
+  "name": "react-router-native-noslash",
   "version": "6.0.2",
   "author": "Remix Software <hello@remix.run>",
   "description": "Declarative routing for React Native applications",

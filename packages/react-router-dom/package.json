@@ -1,5 +1,5 @@
 {
-  "name": "react-router-dom",
+  "name": "react-router-dom-noslash",
   "version": "6.0.2",
   "author": "Remix Software <hello@remix.run>",
   "description": "Declarative routing for React web applications",
