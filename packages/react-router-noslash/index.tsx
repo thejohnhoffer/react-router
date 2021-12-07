@@ -348,11 +348,11 @@ export function useHref(to: To): string {
     `useHref() may be used only in the context of a <Router> component.`
   );
 
-  let { basename, navigator } = React.useContext(NavigationContext);
+  let { basename, rootPath, navigator } = React.useContext(NavigationContext);
   let { hash, pathname, search } = useResolvedPath(to);
 
   let joinedPathname = pathname;
-  if (basename !== "/") {
+  if (basename !== rootPath) {
     let toPathname = getToPathname(to);
     let endsWithSlash = toPathname != null && toPathname.endsWith("/");
     joinedPathname =
