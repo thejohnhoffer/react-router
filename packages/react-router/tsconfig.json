@@ -10,12 +10,10 @@
     "jsx": "react",
 
     "declaration": true,
-    "emitDeclarationOnly": true,
     "typeRoots" : ["./typings"],
 
     "skipLibCheck": true,
 
-    "outDir": "../../build/node_modules/react-router",
     "rootDir": "."
   }
 }
