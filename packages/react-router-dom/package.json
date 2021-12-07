@@ -15,7 +15,7 @@
   "unpkg": "./umd/react-router-dom.production.min.js",
   "dependencies": {
     "history": "^5.1.0",
-    "react-router": "https://github.com/thejohnhoffer/react-router.git#tag=noslash-v3.0&workspace=react-router"
+    "react-router": "https://github.com/thejohnhoffer/react-router.git#tag=noslash-v3.1&workspace=react-router"
   },
   "peerDependencies": {
     "react": ">=16.8",
