@@ -1,6 +1,7 @@
 {
   "private": true,
   "scripts": {
+    "postinstall": "rollup -c && tsc -b && rm -rf ./packages && mv ./build/node_modules packages",
     "build": "rollup -c && tsc -b",
     "clean": "git clean -fdX .",
     "lint": "eslint --cache .",
