@@ -6,7 +6,7 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/thejohnhoffer/react-router.git",
-    "directory": "packages/react-router-noslash"
+    "directory": "packages/react-router"
   },
   "license": "MIT",
   "main": "./main.js",
