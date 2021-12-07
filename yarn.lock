@@ -4041,11 +4041,11 @@ __metadata:
   linkType: hard
 
 "eslint-plugin-react-hooks@npm:next":
-  version: 4.2.1-beta-12bffc78d-20211206
-  resolution: "eslint-plugin-react-hooks@npm:4.2.1-beta-12bffc78d-20211206"
+  version: 4.2.1-beta-c7917fe76-20211206
+  resolution: "eslint-plugin-react-hooks@npm:4.2.1-beta-c7917fe76-20211206"
   peerDependencies:
     eslint: ^3.0.0 || ^4.0.0 || ^5.0.0 || ^6.0.0 || ^7.0.0 || ^8.0.0-0
-  checksum: fa3e7a08587f3c05228ede467a8664a0f0ece3fdd1ded27fca259123271c3a06746d1074743c371239733f531d76284828158f2139d199031648873ba291c314
+  checksum: 43c928dbe9c97e4cd055d1d043d3cd7506d9b198e2bf5656e0694469a4df80b76e42c7fd286ef82d76e85c5324614992c17da4359b0abcdb2cb4bb912353bb3b
   languageName: node
   linkType: hard
 
@@ -6741,13 +6741,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"node-modules-regexp@npm:^1.0.0":
-  version: 1.0.0
-  resolution: "node-modules-regexp@npm:1.0.0"
-  checksum: 99541903536c5ce552786f0fca7f06b88df595e62e423c21fa86a1674ee2363dad1f7482d1bec20b4bd9fa5f262f88e6e5cb788fc56411113f2fe2e97783a3a7
-  languageName: node
-  linkType: hard
-
 "node-notifier@npm:^8.0.0":
   version: 8.0.2
   resolution: "node-notifier@npm:8.0.2"
@@ -7186,11 +7179,9 @@ __metadata:
   linkType: hard
 
 "pirates@npm:^4.0.1":
-  version: 4.0.1
-  resolution: "pirates@npm:4.0.1"
-  dependencies:
-    node-modules-regexp: ^1.0.0
-  checksum: 091e232aac19f0049a681838fa9fcb4af824b5b1eb0e9325aa07b9d13245bfe3e4fa57a7766b9fdcd19cb89f2c15c688b46023be3047cb288023a0c079d3b2a3
+  version: 4.0.4
+  resolution: "pirates@npm:4.0.4"
+  checksum: 6b7187d526fd025a2b91e8fd289c78d88c4adc3ea947b9facbe9cb300a896b0ec00f3e77b36a043001695312a8debbf714453495283bd8a4eaad3bc0c38df425
   languageName: node
   linkType: hard
 
@@ -7475,27 +7466,77 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-router-dom-noslash@workspace:packages/react-router-dom-noslash":
+"react-router-dom-noslash@workspace:packages/react-router-dom":
   version: 0.0.0-use.local
-  resolution: "react-router-dom-noslash@workspace:packages/react-router-dom-noslash"
+  resolution: "react-router-dom-noslash@workspace:packages/react-router-dom"
   dependencies:
     history: ^5.1.0
     react: ^17.0.2
-    react-router-noslash: 6.1.0-noslash.4
+    react-router-noslash: 6.1.0-noslash.6
   peerDependencies:
     react: ">=16.8"
     react-dom: ">=16.8"
   languageName: unknown
   linkType: soft
 
-"react-router-noslash@6.1.0-noslash.4, react-router-noslash@workspace:packages/react-router-noslash":
+"react-router-noslash@6.1.0-noslash.6, react-router-noslash@workspace:packages/react-router":
   version: 0.0.0-use.local
-  resolution: "react-router-noslash@workspace:packages/react-router-noslash"
+  resolution: "react-router-noslash@workspace:packages/react-router"
   dependencies:
     history: ^5.1.0
     react: ^17.0.2
   peerDependencies:
     react: ">=16.8"
+  languageName: unknown
+  linkType: soft
+
+"react-router@workspace:.":
+  version: 0.0.0-use.local
+  resolution: "react-router@workspace:."
+  dependencies:
+    "@ampproject/rollup-plugin-closure-compiler": ^0.26.0
+    "@babel/core": ^7.7.4
+    "@babel/preset-env": ^7.15.8
+    "@babel/preset-modules": ^0.1.4
+    "@babel/preset-react": ^7.14.5
+    "@babel/preset-typescript": ^7.15.0
+    "@rollup/plugin-replace": ^2.2.1
+    "@types/jest": 26.x
+    "@types/jsonfile": ^6.0.1
+    "@types/react": ^17.0.19
+    "@types/react-dom": ^17.0.9
+    "@types/react-test-renderer": 16.x
+    "@types/semver": ^7.3.8
+    "@typescript-eslint/eslint-plugin": ^4.28.3
+    "@typescript-eslint/parser": ^4.28.3
+    babel-eslint: ^10.1.0
+    babel-plugin-dev-expression: ^0.2.2
+    chalk: ^4.1.1
+    cheerio: ^1.0.0-rc.10
+    eslint: ^7.30.0
+    eslint-config-react-app: ^6.0.0
+    eslint-plugin-flowtype: ^5.8.0
+    eslint-plugin-import: ^2.23.4
+    eslint-plugin-jsx-a11y: ^6.4.1
+    eslint-plugin-react: ^7.24.0
+    eslint-plugin-react-hooks: next
+    history: ^5.0.0
+    jest: ^26.6.3
+    jsonfile: ^6.1.0
+    node-fetch: ^2.6.1
+    prettier: ^2.4.1
+    prompt-confirm: ^2.0.4
+    react: ^17.0.2
+    react-dom: ^17.0.2
+    react-test-renderer: ^17.0.2
+    rollup: ^1.27.9
+    rollup-plugin-babel: ^4.3.3
+    rollup-plugin-copy: ^3.1.0
+    rollup-plugin-prettier: ^0.6.0
+    rollup-plugin-terser: ^7.0.2
+    semver: ^7.3.5
+    ts-jest: ^26.5.6
+    typescript: ^4.3.5
   languageName: unknown
   linkType: soft
 
@@ -7933,56 +7974,6 @@ __metadata:
   checksum: 3a02731c20c71321fae647c9c9cab0febee0580c6af029fdcd5dd6f424b8c85119d92c8554c6837327fd323c2458e92d955bbebc90ca6bed87cc626695e7c31f
   languageName: node
   linkType: hard
-
-"root-workspace-0b6124@workspace:.":
-  version: 0.0.0-use.local
-  resolution: "root-workspace-0b6124@workspace:."
-  dependencies:
-    "@ampproject/rollup-plugin-closure-compiler": ^0.26.0
-    "@babel/core": ^7.7.4
-    "@babel/preset-env": ^7.15.8
-    "@babel/preset-modules": ^0.1.4
-    "@babel/preset-react": ^7.14.5
-    "@babel/preset-typescript": ^7.15.0
-    "@rollup/plugin-replace": ^2.2.1
-    "@types/jest": 26.x
-    "@types/jsonfile": ^6.0.1
-    "@types/react": ^17.0.19
-    "@types/react-dom": ^17.0.9
-    "@types/react-test-renderer": 16.x
-    "@types/semver": ^7.3.8
-    "@typescript-eslint/eslint-plugin": ^4.28.3
-    "@typescript-eslint/parser": ^4.28.3
-    babel-eslint: ^10.1.0
-    babel-plugin-dev-expression: ^0.2.2
-    chalk: ^4.1.1
-    cheerio: ^1.0.0-rc.10
-    eslint: ^7.30.0
-    eslint-config-react-app: ^6.0.0
-    eslint-plugin-flowtype: ^5.8.0
-    eslint-plugin-import: ^2.23.4
-    eslint-plugin-jsx-a11y: ^6.4.1
-    eslint-plugin-react: ^7.24.0
-    eslint-plugin-react-hooks: next
-    history: ^5.0.0
-    jest: ^26.6.3
-    jsonfile: ^6.1.0
-    node-fetch: ^2.6.1
-    prettier: ^2.4.1
-    prompt-confirm: ^2.0.4
-    react: ^17.0.2
-    react-dom: ^17.0.2
-    react-test-renderer: ^17.0.2
-    rollup: ^1.27.9
-    rollup-plugin-babel: ^4.3.3
-    rollup-plugin-copy: ^3.1.0
-    rollup-plugin-prettier: ^0.6.0
-    rollup-plugin-terser: ^7.0.2
-    semver: ^7.3.5
-    ts-jest: ^26.5.6
-    typescript: ^4.3.5
-  languageName: unknown
-  linkType: soft
 
 "rsvp@npm:^4.8.4":
   version: 4.8.5

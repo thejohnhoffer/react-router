@@ -25,8 +25,8 @@ function getVersion(sourceDir) {
 }
 
 function reactRouter() {
-  const SOURCE_DIR = "packages/react-router-noslash";
-  const OUTPUT_DIR = "build/node_modules/react-router-noslash";
+  const SOURCE_DIR = "packages/react-router";
+  const OUTPUT_DIR = "build/node_modules/react-router";
   const version = getVersion(SOURCE_DIR);
 
   // JS modules for bundlers
@@ -212,8 +212,8 @@ function reactRouter() {
 }
 
 function reactRouterDom() {
-  const SOURCE_DIR = "packages/react-router-dom-noslash";
-  const OUTPUT_DIR = "build/node_modules/react-router-dom-noslash";
+  const SOURCE_DIR = "packages/react-router-dom";
+  const OUTPUT_DIR = "build/node_modules/react-router-dom";
   const version = getVersion(SOURCE_DIR);
 
   // JS modules for bundlers
@@ -226,7 +226,7 @@ function reactRouterDom() {
         sourcemap: !PRETTY,
         banner: createBanner("React Router DOM", version)
       },
-      external: ["history", "react", "react-dom", "react-router-noslash"],
+      external: ["history", "react", "react-dom", "react-router"],
       plugins: [
         babel({
           exclude: /node_modules/,
@@ -262,7 +262,7 @@ function reactRouterDom() {
         sourcemap: !PRETTY,
         banner: createBanner("React Router DOM", version)
       },
-      external: ["history", "react", "react-router-noslash"],
+      external: ["history", "react", "react-router"],
       plugins: [
         babel({
           exclude: /node_modules/,
@@ -288,7 +288,7 @@ function reactRouterDom() {
         sourcemap: !PRETTY,
         banner: createBanner("React Router DOM", version)
       },
-      external: ["history", "react", "react-router-noslash"],
+      external: ["history", "react", "react-router"],
       plugins: [
         babel({
           exclude: /node_modules/,
@@ -334,11 +334,11 @@ function reactRouterDom() {
         globals: {
           history: "HistoryLibrary",
           react: "React",
-          "react-router-noslash": "ReactRouter"
+          "react-router": "ReactRouter"
         },
         name: "ReactRouterDOM"
       },
-      external: ["history", "react", "react-router-noslash"],
+      external: ["history", "react", "react-router"],
       plugins: [
         babel({
           exclude: /node_modules/,
@@ -366,11 +366,11 @@ function reactRouterDom() {
         globals: {
           history: "HistoryLibrary",
           react: "React",
-          "react-router-noslash": "ReactRouter"
+          "react-router": "ReactRouter"
         },
         name: "ReactRouterDOM"
       },
-      external: ["history", "react", "react-router-noslash"],
+      external: ["history", "react", "react-router"],
       plugins: [
         babel({
           exclude: /node_modules/,
@@ -414,7 +414,7 @@ function reactRouterDom() {
         "history",
         "react",
         "react-dom/server",
-        "react-router-dom-noslash"
+        "react-router-dom"
       ],
       plugins: [
         babel({
@@ -441,7 +441,7 @@ function reactRouterDom() {
         "history",
         "react",
         "react-dom/server",
-        "react-router-dom-noslash"
+        "react-router-dom"
       ],
       plugins: [
         babel({

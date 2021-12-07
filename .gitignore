@@ -1,11 +1,16 @@
-npm-debug.log
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+yarn-debug.log
 
 /build/
 /docs/api/
 /website/build/
-node_modules/
 
-/examples/*/yarn.lock
 /examples/*/dist
 /tutorial/dist
 

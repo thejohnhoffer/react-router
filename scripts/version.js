@@ -113,7 +113,7 @@ async function run() {
     ensureCleanWorkingDirectory();
 
     // 1. Get the next version number
-    let currentVersion = await getPackageVersion("react-router-noslash");
+    let currentVersion = await getPackageVersion("react-router");
     let version = semver.valid(givenVersion);
     if (version == null) {
       version = getNextVersion(currentVersion, givenVersion, prereleaseId);
@@ -127,13 +127,13 @@ async function run() {
     if (answer === false) return 0;
 
     // 3. Update react-router version
-    await updatePackageConfig("react-router-noslash", config => {
+    await updatePackageConfig("react-router", config => {
       config.version = version;
     });
     console.log(chalk.green(`  Updated react-router to version ${version}`));
 
     // 4. Update react-router-dom version + react-router dep
-    await updatePackageConfig("react-router-dom-noslash", config => {
+    await updatePackageConfig("react-router-dom", config => {
       config.version = version;
       config.dependencies["react-router-noslash"] = version;
     });

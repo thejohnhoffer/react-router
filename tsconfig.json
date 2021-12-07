@@ -1,7 +1,7 @@
 {
   "files": [],
   "references": [
-    { "path": "packages/react-router-noslash" },
-    { "path": "packages/react-router-dom-noslash" }
+    { "path": "packages/react-router" },
+    { "path": "packages/react-router-dom" }
   ]
 }
