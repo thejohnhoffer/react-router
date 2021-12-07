@@ -64,6 +64,7 @@ export type Navigator = Omit<
 
 interface NavigationContextObject {
   basename: string;
+  rootPath: string;
   navigator: Navigator;
   static: boolean;
 }
@@ -267,10 +268,11 @@ export function Router({
       ` You should never have more than one in your app.`
   );
 
-  let basename = normalizePathname(basenameProp);
+  let rootPath = !basenameProp ? "" : "/";
+  let basename = rootPath? normalizePathname(basenameProp) : rootPath;
   let navigationContext = React.useMemo(
-    () => ({ basename, navigator, static: staticProp }),
-    [basename, navigator, staticProp]
+    () => ({ basename, rootPath, navigator, static: staticProp }),
+    [rootPath, basename, navigator, staticProp]
   );
 
   if (typeof locationProp === "string") {
@@ -461,7 +463,7 @@ export function useNavigate(): NavigateFunction {
     `useNavigate() may be used only in the context of a <Router> component.`
   );
 
-  let { basename, navigator } = React.useContext(NavigationContext);
+  let { basename, rootPath, navigator } = React.useContext(NavigationContext);
   let { matches } = React.useContext(RouteContext);
   let { pathname: locationPathname } = useLocation();
 
@@ -492,10 +494,11 @@ export function useNavigate(): NavigateFunction {
       let path = resolveTo(
         to,
         JSON.parse(routePathnamesJson),
-        locationPathname
+        locationPathname,
+        rootPath
       );
 
-      if (basename !== "/") {
+      if (basename !== rootPath) {
         path.pathname = joinPaths([basename, path.pathname]);
       }
 
@@ -504,7 +507,7 @@ export function useNavigate(): NavigateFunction {
         options.state
       );
     },
-    [basename, navigator, routePathnamesJson, locationPathname]
+    [rootPath, basename, navigator, routePathnamesJson, locationPathname]
   );
 
   return navigate;
@@ -542,14 +545,14 @@ export function useParams<Key extends string = string>(): Readonly<
 export function useResolvedPath(to: To): Path {
   let { matches } = React.useContext(RouteContext);
   let { pathname: locationPathname } = useLocation();
+  let { rootPath } = React.useContext(NavigationContext);
 
   let routePathnamesJson = JSON.stringify(
     matches.map(match => match.pathnameBase)
   );
-
   return React.useMemo(
-    () => resolveTo(to, JSON.parse(routePathnamesJson), locationPathname),
-    [to, routePathnamesJson, locationPathname]
+    () => resolveTo(to, JSON.parse(routePathnamesJson), locationPathname, rootPath),
+    [to, rootPath, routePathnamesJson, locationPathname]
   );
 }
 
@@ -1181,7 +1184,7 @@ function safelyDecodeURIComponent(value: string, paramName: string) {
  *
  * @see https://reactrouter.com/docs/en/v6/api#resolvepath
  */
-export function resolvePath(to: To, fromPathname = "/"): Path {
+export function resolvePath(to: To, fromPathname = "/", rootPath = "/"): Path {
   let {
     pathname: toPathname,
     search = "",
@@ -1189,7 +1192,7 @@ export function resolvePath(to: To, fromPathname = "/"): Path {
   } = typeof to === "string" ? parsePath(to) : to;
 
   let pathname = toPathname
-    ? toPathname.startsWith("/")
+    ? toPathname.startsWith(rootPath)
       ? toPathname
       : resolvePathname(toPathname, fromPathname)
     : fromPathname;
@@ -1220,10 +1223,11 @@ function resolvePathname(relativePath: string, fromPathname: string): string {
 function resolveTo(
   toArg: To,
   routePathnames: string[],
-  locationPathname: string
+  locationPathname: string,
+  rootPath: string
 ): Path {
   let to = typeof toArg === "string" ? parsePath(toArg) : toArg;
-  let toPathname = toArg === "" || to.pathname === "" ? "/" : to.pathname;
+  let toPathname = toArg === "" || to.pathname === "" ? rootPath : to.pathname;
 
   // If a pathname is explicitly provided in `to`, it should be relative to the
   // route context. This is explained in `Note on `<Link to>` values` in our
@@ -1254,14 +1258,15 @@ function resolveTo(
 
     // If there are more ".." segments than parent routes, resolve relative to
     // the root / URL.
-    from = routePathnameIndex >= 0 ? routePathnames[routePathnameIndex] : "/";
+    from = routePathnameIndex >= 0 ? routePathnames[routePathnameIndex] : rootPath;
   }
 
-  let path = resolvePath(to, from);
+  let path = resolvePath(to, from, rootPath);
 
   // Ensure the pathname has a trailing slash if the original to value had one.
   if (
     toPathname &&
+    rootPath &&
     toPathname !== "/" &&
     toPathname.endsWith("/") &&
     !path.pathname.endsWith("/")
@@ -1282,7 +1287,7 @@ function getToPathname(to: To): string | undefined {
 }
 
 function stripBasename(pathname: string, basename: string): string | null {
-  if (basename === "/") return pathname;
+  if (basename.length <= 1) return pathname;
 
   if (!pathname.toLowerCase().startsWith(basename.toLowerCase())) {
     return null;
