@@ -59,17 +59,12 @@
     "rollup-plugin-terser": "^7.0.2",
     "semver": "^7.3.5",
     "ts-jest": "^26.5.6",
-    "typescript": "^4.3.5"
+    "typescript": "^4.5.2"
   },
   "workspaces": {
     "packages": [
       "packages/react-router",
-      "packages/react-router-dom",
-      "packages/react-router-native"
-    ],
-    "nohoist": [
-      "**/react-native",
-      "**/react-native/**"
+      "packages/react-router-dom"
     ]
   },
   "jest": {
@@ -90,5 +85,6 @@
     "build/node_modules/react-router-dom/umd/react-router-dom.production.min.js": {
       "none": "8 kB"
     }
-  }
+  },
+  "packageManager": "yarn@3.1.1"
 }

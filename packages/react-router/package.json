@@ -27,5 +27,8 @@
     "routing",
     "history",
     "link"
-  ]
+  ],
+  "devDependencies": {
+    "react": "^17.0.2"
+  }
 }

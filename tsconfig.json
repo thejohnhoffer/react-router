@@ -2,7 +2,6 @@
   "files": [],
   "references": [
     { "path": "packages/react-router" },
-    { "path": "packages/react-router-dom" },
-    { "path": "packages/react-router-native" }
+    { "path": "packages/react-router-dom" }
   ]
 }

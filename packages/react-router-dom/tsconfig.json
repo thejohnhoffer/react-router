@@ -11,6 +11,7 @@
 
     "declaration": true,
     "emitDeclarationOnly": true,
+    "typeRoots" : ["./typings"],
 
     "skipLibCheck": true,
 

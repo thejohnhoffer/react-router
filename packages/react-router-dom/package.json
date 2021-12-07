@@ -14,8 +14,8 @@
   "types": "./index.d.ts",
   "unpkg": "./umd/react-router-dom.production.min.js",
   "dependencies": {
-    "react-router": "https://github.com/thejohnhoffer/react-router.git#tag=noslash-v2.1&workspace=react-router",
-    "history": "^5.1.0"
+    "history": "^5.1.0",
+    "react-router": "https://github.com/thejohnhoffer/react-router.git#tag=noslash-v2.2&workspace=react-router"
   },
   "peerDependencies": {
     "react": ">=16.8",
@@ -29,5 +29,8 @@
     "routing",
     "history",
     "link"
-  ]
+  ],
+  "devDependencies": {
+    "react": "^17.0.2"
+  }
 }
