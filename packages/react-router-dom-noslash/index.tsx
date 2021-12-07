@@ -24,8 +24,8 @@ import {
   useParams,
   useResolvedPath,
   useRoutes
-} from "react-router";
-import type { To } from "react-router";
+} from "react-router-noslash";
+import type { To } from "react-router-noslash";
 
 function warning(cond: boolean, message: string): void {
   if (!cond) {
@@ -95,7 +95,7 @@ export type {
   IndexRouteProps,
   RouterProps,
   RoutesProps
-} from "react-router";
+} from "react-router-noslash";
 
 ///////////////////////////////////////////////////////////////////////////////
 // DANGER! PLEASE READ ME!
@@ -115,7 +115,7 @@ export {
   UNSAFE_NavigationContext,
   UNSAFE_LocationContext,
   UNSAFE_RouteContext
-} from "react-router";
+} from "react-router-noslash";
 
 ////////////////////////////////////////////////////////////////////////////////
 // COMPONENTS

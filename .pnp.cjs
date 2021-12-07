@@ -9712,29 +9712,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD",
         }]
       ]],
-      ["react-router", [
-        ["https://github.com/thejohnhoffer/react-router.git#workspace=react-router&commit=42f7043b1623dac4956bcc8ac867cbf2472d0f3d", {
-          "packageLocation": "./.yarn/cache/react-router-https-29e5f6766c-4bd15c894d.zip/node_modules/react-router/",
-          "packageDependencies": [
-            ["react-router", "https://github.com/thejohnhoffer/react-router.git#workspace=react-router&commit=42f7043b1623dac4956bcc8ac867cbf2472d0f3d"]
-          ],
-          "linkType": "SOFT",
-        }],
-        ["virtual:645bac48d5ac3654f252274436a10d5539c9840da94706514a0438b780bf1aac6155ea82f4a282a51e1f32b8bf7367ce8755ce323d90b8a6c256189a40ba25a1#https://github.com/thejohnhoffer/react-router.git#workspace=react-router&commit=42f7043b1623dac4956bcc8ac867cbf2472d0f3d", {
-          "packageLocation": "./.yarn/__virtual__/react-router-virtual-77c7f97a17/0/cache/react-router-https-29e5f6766c-4bd15c894d.zip/node_modules/react-router/",
-          "packageDependencies": [
-            ["react-router", "virtual:645bac48d5ac3654f252274436a10d5539c9840da94706514a0438b780bf1aac6155ea82f4a282a51e1f32b8bf7367ce8755ce323d90b8a6c256189a40ba25a1#https://github.com/thejohnhoffer/react-router.git#workspace=react-router&commit=42f7043b1623dac4956bcc8ac867cbf2472d0f3d"],
-            ["@types/react", null],
-            ["history", "npm:5.1.0"],
-            ["react", "npm:17.0.2"]
-          ],
-          "packagePeers": [
-            "@types/react",
-            "react"
-          ],
-          "linkType": "HARD",
-        }]
-      ]],
       ["react-router-dom-noslash", [
         ["workspace:packages/react-router-dom-noslash", {
           "packageLocation": "./packages/react-router-dom-noslash/",
@@ -9742,7 +9719,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["react-router-dom-noslash", "workspace:packages/react-router-dom-noslash"],
             ["history", "npm:5.1.0"],
             ["react", "npm:17.0.2"],
-            ["react-router", "virtual:645bac48d5ac3654f252274436a10d5539c9840da94706514a0438b780bf1aac6155ea82f4a282a51e1f32b8bf7367ce8755ce323d90b8a6c256189a40ba25a1#https://github.com/thejohnhoffer/react-router.git#workspace=react-router&commit=42f7043b1623dac4956bcc8ac867cbf2472d0f3d"],
             ["react-router-noslash", "virtual:645bac48d5ac3654f252274436a10d5539c9840da94706514a0438b780bf1aac6155ea82f4a282a51e1f32b8bf7367ce8755ce323d90b8a6c256189a40ba25a1#workspace:packages/react-router-noslash"]
           ],
           "linkType": "SOFT",

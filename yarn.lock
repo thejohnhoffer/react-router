@@ -7481,15 +7481,14 @@ __metadata:
   dependencies:
     history: ^5.1.0
     react: ^17.0.2
-    react-router: "https://github.com/thejohnhoffer/react-router.git#tag=noslash-v3.2&workspace=react-router"
-    react-router-noslash: 6.1.0-noslash.1
+    react-router-noslash: 6.1.0-noslash.3
   peerDependencies:
     react: ">=16.8"
     react-dom: ">=16.8"
   languageName: unknown
   linkType: soft
 
-"react-router-noslash@6.1.0-noslash.1, react-router-noslash@workspace:packages/react-router-noslash":
+"react-router-noslash@6.1.0-noslash.3, react-router-noslash@workspace:packages/react-router-noslash":
   version: 0.0.0-use.local
   resolution: "react-router-noslash@workspace:packages/react-router-noslash"
   dependencies:
@@ -7499,17 +7498,6 @@ __metadata:
     react: ">=16.8"
   languageName: unknown
   linkType: soft
-
-"react-router@https://github.com/thejohnhoffer/react-router.git#tag=noslash-v3.2&workspace=react-router":
-  version: 6.0.2
-  resolution: "react-router@https://github.com/thejohnhoffer/react-router.git#workspace=react-router&commit=42f7043b1623dac4956bcc8ac867cbf2472d0f3d"
-  dependencies:
-    history: ^5.1.0
-  peerDependencies:
-    react: ">=16.8"
-  checksum: 4bd15c894d72862de8d0653b3956838db9fe47d73b17bf4a0a5645abe50997b1cf596c8729527686256d19761d553e9cb5d1ce3b8cfe2bb76d45b42f96cb2acb
-  languageName: node
-  linkType: hard
 
 "react-shallow-renderer@npm:^16.13.1":
   version: 16.14.1
