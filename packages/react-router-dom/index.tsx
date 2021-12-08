@@ -263,10 +263,6 @@ export function HistoryRouter({
   );
 }
 
-if (__DEV__) {
-  HistoryRouter.displayName = "HistoryRouter";
-}
-
 function isModifiedEvent(event: React.MouseEvent) {
   return !!(event.metaKey || event.altKey || event.ctrlKey || event.shiftKey);
 }
@@ -310,10 +306,6 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
     );
   }
 );
-
-if (__DEV__) {
-  Link.displayName = "Link";
-}
 
 export interface NavLinkProps extends Omit<LinkProps, "className" | "style"> {
   caseSensitive?: boolean;
@@ -387,10 +379,6 @@ export const NavLink = React.forwardRef<HTMLAnchorElement, NavLinkProps>(
     );
   }
 );
-
-if (__DEV__) {
-  NavLink.displayName = "NavLink";
-}
 
 ////////////////////////////////////////////////////////////////////////////////
 // HOOKS
