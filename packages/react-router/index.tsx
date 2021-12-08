@@ -62,10 +62,15 @@ export type Navigator = Omit<
   "action" | "location" | "back" | "forward" | "listen" | "block"
 >;
 
+interface TrimPathname {
+  (location: Location): Location;
+  (path: Path): Path;
+}
+
 interface NavigationContextObject {
   basename: string;
-  isRelative: boolean;
   navigator: Navigator;
+  trimPathname: TrimPathname;
   static: boolean;
 }
 
@@ -256,11 +261,11 @@ export function Router({
       ` You should never have more than one in your app.`
   );
 
-  let isRelative = basenameProp === "";
-  let basename = normalizePathname(basenameProp, isRelative);
+  let trimPathname = useTrimPathname(basenameProp);
+  let basename = normalizePathname(basenameProp);
   let navigationContext = React.useMemo(
-    () => ({ basename, isRelative, navigator, static: staticProp }),
-    [isRelative, basename, navigator, staticProp]
+    () => ({ basename, trimPathname, navigator, static: staticProp }),
+    [basename, trimPathname, navigator, staticProp]
   );
 
   if (typeof locationProp === "string") {
@@ -348,11 +353,11 @@ export function useHref(to: To): string {
     `useHref() may be used only in the context of a <Router> component.`
   );
 
-  let { basename, isRelative, navigator } = React.useContext(NavigationContext);
+  let { basename, trimPathname, navigator } = React.useContext(NavigationContext);
   let { hash, pathname, search } = useResolvedPath(to);
 
   let joinedPathname = pathname;
-  if (basename !== findRoot(isRelative)) {
+  if (basename !== "/") {
     let toPathname = getToPathname(to);
     let endsWithSlash = toPathname != null && toPathname.endsWith("/");
     joinedPathname =
@@ -361,7 +366,8 @@ export function useHref(to: To): string {
         : joinPaths([basename, pathname]);
   }
 
-  return navigator.createHref({ pathname: joinedPathname, search, hash });
+  let navPath = trimPathname({ pathname: joinedPathname, search, hash })
+  return navigator.createHref(navPath);
 }
 
 /**
@@ -392,6 +398,18 @@ export function useLocation(): Location {
   );
 
   return React.useContext(LocationContext).location;
+}
+
+/**
+ * Returns a function to remove leading slash from relative Path or Location
+ */
+export function useTrimPathname(basenameProp: string): TrimPathname {
+  function trim({pathname, ...rest}: Location): Location;
+  function trim({pathname, ...rest}: Path): Path {
+    let isRelative = basenameProp === "";
+    return {...rest, pathname: isRelative? pathname.slice(1) : pathname}
+  }
+  return trim
 }
 
 /**
@@ -452,7 +470,7 @@ export function useNavigate(): NavigateFunction {
     `useNavigate() may be used only in the context of a <Router> component.`
   );
 
-  let { basename, isRelative, navigator } = React.useContext(NavigationContext);
+  let { basename, trimPathname, navigator } = React.useContext(NavigationContext);
   let { matches } = React.useContext(RouteContext);
   let { pathname: locationPathname } = useLocation();
 
@@ -483,20 +501,19 @@ export function useNavigate(): NavigateFunction {
       let path = resolveTo(
         to,
         JSON.parse(routePathnamesJson),
-        locationPathname,
-        isRelative
+        locationPathname
       );
 
-      if (basename !== findRoot(isRelative)) {
+      if (basename !== "/") {
         path.pathname = joinPaths([basename, path.pathname]);
       }
 
       (!!options.replace ? navigator.replace : navigator.push)(
-        path,
+        trimPathname(path),
         options.state
       );
     },
-    [isRelative, basename, navigator, routePathnamesJson, locationPathname]
+    [basename, navigator, routePathnamesJson, locationPathname]
   );
 
   return navigate;
@@ -536,14 +553,13 @@ export function useParams<
 export function useResolvedPath(to: To): Path {
   let { matches } = React.useContext(RouteContext);
   let { pathname: locationPathname } = useLocation();
-  let { isRelative } = React.useContext(NavigationContext);
 
   let routePathnamesJson = JSON.stringify(
     matches.map(match => match.pathnameBase)
   );
   return React.useMemo(
-    () => resolveTo(to, JSON.parse(routePathnamesJson), locationPathname, isRelative),
-    [to, isRelative, routePathnamesJson, locationPathname]
+    () => resolveTo(to, JSON.parse(routePathnamesJson), locationPathname),
+    [to, routePathnamesJson, locationPathname]
   );
 }
 
@@ -1033,11 +1049,10 @@ export function matchPath<ParamKey extends string = string>(
   let [matcher, paramNames] = compilePath(
     pattern.path,
     pattern.caseSensitive,
-    pattern.end,
-    pattern.isRelative
+    pattern.end
   );
 
-  let match = pathname.match(matcher);
+  let match = makeAbsolute(pathname, pattern.isRelative).match(matcher);
   if (!match) return null;
 
   let matchedPathname = match[0];
@@ -1074,8 +1089,7 @@ export function matchPath<ParamKey extends string = string>(
 function compilePath(
   path: string,
   caseSensitive = false,
-  end = true,
-  isRelative = false
+  end = true
 ): [RegExp, string[]] {
   warning(
     path === "*" || !path.endsWith("*") || path.endsWith("/*"),
@@ -1090,7 +1104,7 @@ function compilePath(
     "^" +
     path
       .replace(/\/*\*?$/, "") // Ignore trailing / and /*, we'll handle it below
-      .replace(/^\/*/, isRelative? "" : "/") // Make sure it has a leading /
+      .replace(/^\/*/, "/") // Make sure it has a leading /
       .replace(/[\\.*+^$?{}|()[\]]/g, "\\$&") // Escape special regex chars
       .replace(/:(\w+)/g, (_: string, paramName: string) => {
         paramNames.push(paramName);
@@ -1137,7 +1151,7 @@ function safelyDecodeURIComponent(value: string, paramName: string) {
  *
  * @see https://reactrouter.com/docs/en/v6/api#resolvepath
  */
-export function resolvePath(to: To, fromPathname = "/", isRelative = false): Path {
+export function resolvePath(to: To, fromPathname = "/"): Path {
   let {
     pathname: toPathname,
     search = "",
@@ -1145,7 +1159,7 @@ export function resolvePath(to: To, fromPathname = "/", isRelative = false): Pat
   } = typeof to === "string" ? parsePath(to) : to;
 
   let pathname = toPathname
-    ? toPathname.startsWith(findRoot(isRelative))
+    ? toPathname.startsWith("/")
       ? toPathname
       : resolvePathname(toPathname, fromPathname)
     : fromPathname;
@@ -1176,11 +1190,10 @@ function resolvePathname(relativePath: string, fromPathname: string): string {
 function resolveTo(
   toArg: To,
   routePathnames: string[],
-  locationPathname: string,
-  isRelative: boolean
+  locationPathname: string
 ): Path {
   let to = typeof toArg === "string" ? parsePath(toArg) : toArg;
-  let toPathname = toArg === "" || to.pathname === "" ? findRoot(isRelative) : to.pathname;
+  let toPathname = toArg === "" || to.pathname === "" ? "/" : to.pathname;
 
   // If a pathname is explicitly provided in `to`, it should be relative to the
   // route context. This is explained in `Note on `<Link to>` values` in our
@@ -1211,15 +1224,14 @@ function resolveTo(
 
     // If there are more ".." segments than parent routes, resolve relative to
     // the root / URL.
-    from = routePathnameIndex >= 0 ? routePathnames[routePathnameIndex] : findRoot(isRelative);
+    from = routePathnameIndex >= 0 ? routePathnames[routePathnameIndex] : "/";
   }
 
-  let path = resolvePath(to, from, isRelative);
+  let path = resolvePath(to, from);
 
   // Ensure the pathname has a trailing slash if the original to value had one.
   if (
     toPathname &&
-    !isRelative &&
     toPathname !== "/" &&
     toPathname.endsWith("/") &&
     !path.pathname.endsWith("/")
@@ -1258,10 +1270,13 @@ function stripBasename(pathname: string, basename: string): string | null {
 const joinPaths = (paths: string[]): string =>
   paths.join("/").replace(/\/\/+/g, "/");
 
-const findRoot = (isRelative: boolean): string => isRelative? "" : "/"
+const makeAbsolute = (pathname: string, isRelative: boolean): string => {
+  return (isRelative ? "/" : "") + pathname
+}
+const toRelative = (pathname: string): string => pathname.slice(1)
 
-const normalizePathname = (pathname: string, isRelative: boolean): string =>
-  pathname.replace(/\/+$/, "").replace(/^\/*/, findRoot(isRelative));
+const normalizePathname = (pathname: string): string =>
+  pathname.replace(/\/+$/, "").replace(/^\/*/, "/");
 
 const normalizeSearch = (search: string): string =>
   !search || search === "?"
