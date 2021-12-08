@@ -67,5 +67,6 @@
       "<rootDir>/packages/*"
     ]
   },
-  "name": "react-router"
+  "name": "react-router",
+  "version": "v6.1.0-noslash.6.0"
 }
