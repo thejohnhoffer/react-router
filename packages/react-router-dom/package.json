@@ -5,7 +5,7 @@
   "description": "Declarative routing for React web applications",
   "repository": {
     "type": "git",
-    "url": "https://github.com/thejohnhoffer/react-router.git",
+    "url": "https://github.com/remix-run/react-router.git",
     "directory": "packages/react-router-dom"
   },
   "license": "MIT",
@@ -29,8 +29,5 @@
     "routing",
     "history",
     "link"
-  ],
-  "devDependencies": {
-    "react": "^17.0.2"
-  }
+  ]
 }

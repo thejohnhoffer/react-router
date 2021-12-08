@@ -6,7 +6,7 @@
     "module": "ES2020",
     "moduleResolution": "node",
 
-    "strict": false,
+    "strict": true,
     "jsx": "react",
 
     "declaration": true,
