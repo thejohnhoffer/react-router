@@ -19,6 +19,7 @@ import {
   generatePath,
   matchRoutes,
   matchPath,
+  parseLocation,
   resolvePath,
   renderMatches,
   useHref,
@@ -30,7 +31,8 @@ import {
   useOutlet,
   useParams,
   useResolvedPath,
-  useRoutes
+  useRoutes,
+  useTrimPathname
 } from "react-router";
 import type { To } from "react-router";
 
@@ -52,6 +54,7 @@ export {
   generatePath,
   matchRoutes,
   matchPath,
+  parseLocation,
   resolvePath,
   renderMatches,
   useHref,
@@ -63,7 +66,8 @@ export {
   useOutlet,
   useParams,
   useResolvedPath,
-  useRoutes
+  useRoutes,
+  useTrimPathname
 };
 
 export type {

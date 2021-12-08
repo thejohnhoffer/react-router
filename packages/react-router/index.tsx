@@ -76,12 +76,20 @@ interface NavigationContextObject {
 
 const NavigationContext = React.createContext<NavigationContextObject>(null!);
 
+if (__DEV__) {
+  NavigationContext.displayName = "Navigation";
+}
+
 interface LocationContextObject {
   location: Location;
   navigationType: NavigationType;
 }
 
 const LocationContext = React.createContext<LocationContextObject>(null!);
+
+if (__DEV__) {
+  LocationContext.displayName = "Location";
+}
 
 interface RouteContextObject {
   outlet: React.ReactElement | null;
@@ -92,6 +100,10 @@ const RouteContext = React.createContext<RouteContextObject>({
   outlet: null,
   matches: []
 });
+
+if (__DEV__) {
+  RouteContext.displayName = "Route";
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 // COMPONENTS
@@ -273,12 +285,8 @@ export function Router({
   }
 
   let {
-    pathname = "/",
-    search = "",
-    hash = "",
-    state = null,
-    key = "default"
-  } = locationProp;
+    pathname, search, hash, state, key
+  } = parseLocation(locationProp)
 
   let location = React.useMemo(() => {
     let trailingPathname = stripBasename(pathname, basename);
@@ -401,11 +409,23 @@ export function useLocation(): Location {
 }
 
 /**
+ * Returns a complete Location with an absolute pathname
+ */
+export function parseLocation({pathname, ...rest}: Partial<Location>): Location {
+  const defaultLocation = {
+    pathname: "/", search: "", hash: "",
+    state: null, key: "default",
+  }
+  return {...defaultLocation, ...rest, pathname: fromRelative(pathname)}
+}
+
+/**
  * Returns a function to remove leading slash from relative Path or Location
  */
 export function useTrimPathname(basenameProp: string): TrimPathname {
+  function trim({pathname, ...rest}: Path): Path;
   function trim({pathname, ...rest}: Location): Location;
-  function trim({pathname, ...rest}: Path): Path {
+  function trim({pathname, ...rest}: Record<string, any>): Record<string, any> {
     let isRelative = basenameProp === "";
     return {...rest, pathname: isRelative? pathname.slice(1) : pathname}
   }
@@ -589,6 +609,41 @@ export function useRoutes(
   let parentPathnameBase = routeMatch ? routeMatch.pathnameBase : "/";
   let parentRoute = routeMatch && routeMatch.route;
 
+  if (__DEV__) {
+    // You won't get a warning about 2 different <Routes> under a <Route>
+    // without a trailing *, but this is a best-effort warning anyway since we
+    // cannot even give the warning unless they land at the parent route.
+    //
+    // Example:
+    //
+    // <Routes>
+    //   {/* This route path MUST end with /* because otherwise
+    //       it will never match /blog/post/123 */}
+    //   <Route path="blog" element={<Blog />} />
+    //   <Route path="blog/feed" element={<BlogFeed />} />
+    // </Routes>
+    //
+    // function Blog() {
+    //   return (
+    //     <Routes>
+    //       <Route path="post/:id" element={<Post />} />
+    //     </Routes>
+    //   );
+    // }
+    let parentPath = (parentRoute && parentRoute.path) || "";
+    warningOnce(
+      parentPathname,
+      !parentRoute || parentPath.endsWith("*"),
+      `You rendered descendant <Routes> (or called \`useRoutes()\`) at ` +
+        `"${parentPathname}" (under <Route path="${parentPath}">) but the ` +
+        `parent route path has no trailing "*". This means if you navigate ` +
+        `deeper, the parent won't match anymore and therefore the child ` +
+        `routes will never render.\n\n` +
+        `Please change the parent <Route path="${parentPath}"> to <Route ` +
+        `path="${parentPath}/*">.`
+    );
+  }
+
   let locationFromContext = useLocation();
 
   let location;
@@ -616,6 +671,20 @@ export function useRoutes(
       ? pathname
       : pathname.slice(parentPathnameBase.length) || "/";
   let matches = matchRoutes(routes, { pathname: remainingPathname });
+
+  if (__DEV__) {
+    warning(
+      parentRoute || matches != null,
+      `No routes matched location "${location.pathname}${location.search}${location.hash}" `
+    );
+
+    warning(
+      matches == null ||
+        matches[matches.length - 1].route.element !== undefined,
+      `Matched leaf route at location "${location.pathname}${location.search}${location.hash}" does not have an element. ` +
+        `This means it will render an <Outlet /> with a null value by default resulting in an "empty" page.`
+    );
+  }
 
   return _renderMatches(
     matches &&
@@ -672,13 +741,11 @@ export function createRoutesFromChildren(
       }] is not a <Route> component. All component children of <Routes> must be a <Route> or <React.Fragment>`
     );
 
-    let isRelative = !element.props.path.startsWith("/")
     let route: RouteObject = {
       caseSensitive: element.props.caseSensitive,
       element: element.props.element,
       index: element.props.index,
-      path: element.props.path,
-      isRelative
+      path: element.props.path
     };
 
     if (element.props.children) {
@@ -706,7 +773,6 @@ export interface RouteObject {
   caseSensitive?: boolean;
   children?: RouteObject[];
   element?: React.ReactNode;
-  isRelative?: boolean;
   index?: boolean;
   path?: string;
 }
@@ -759,10 +825,11 @@ export function matchRoutes(
   locationArg: Partial<Location> | string,
   basename = "/"
 ): RouteMatch[] | null {
-  let location =
-    typeof locationArg === "string" ? parsePath(locationArg) : locationArg;
+  let absolutePathname = parseLocation(
+    typeof locationArg === "string" ? parsePath(locationArg) : locationArg
+  ).pathname;
 
-  let pathname = stripBasename(location.pathname || "/", basename);
+  let pathname = stripBasename(absolutePathname, basename);
 
   if (pathname == null) {
     return null;
@@ -914,7 +981,6 @@ function matchRouteBranch<ParamKey extends string = string>(
   let matchedParams = {};
   let matchedPathname = "/";
   let matches: RouteMatch[] = [];
-  let isRelative = routes[0].isRelative;
   for (let i = 0; i < routesMeta.length; ++i) {
     let meta = routesMeta[i];
     let end = i === routesMeta.length - 1;
@@ -923,7 +989,7 @@ function matchRouteBranch<ParamKey extends string = string>(
         ? pathname
         : pathname.slice(matchedPathname.length) || "/";
     let match = matchPath(
-      { path: meta.relativePath, caseSensitive: meta.caseSensitive, end, isRelative },
+      { path: meta.relativePath, caseSensitive: meta.caseSensitive, end },
       remainingPathname
     );
 
@@ -999,11 +1065,6 @@ export interface PathPattern {
    * Should be `true` if this pattern should match the entire URL pathname.
    */
   end?: boolean;
-  /**
-   * Should be `true` if this pattern should match relative URL
-   */
-  isRelative?: boolean;
-
 }
 
 /**
@@ -1052,7 +1113,7 @@ export function matchPath<ParamKey extends string = string>(
     pattern.end
   );
 
-  let match = makeAbsolute(pathname, pattern.isRelative).match(matcher);
+  let match = pathname.match(matcher);
   if (!match) return null;
 
   let matchedPathname = match[0];
@@ -1252,7 +1313,8 @@ function getToPathname(to: To): string | undefined {
 }
 
 function stripBasename(pathname: string, basename: string): string | null {
-  if (basename.length <= 1) return pathname;
+
+  if (basename === "/") return pathname;
 
   if (!pathname.toLowerCase().startsWith(basename.toLowerCase())) {
     return null;
@@ -1270,13 +1332,11 @@ function stripBasename(pathname: string, basename: string): string | null {
 const joinPaths = (paths: string[]): string =>
   paths.join("/").replace(/\/\/+/g, "/");
 
-const makeAbsolute = (pathname: string, isRelative: boolean): string => {
-  return (isRelative ? "/" : "") + pathname
-}
-const toRelative = (pathname: string): string => pathname.slice(1)
+const fromRelative = (pathname?: string): string =>
+  (pathname || '/').replace(/^\/*/, "/");
 
-const normalizePathname = (pathname: string): string =>
-  pathname.replace(/\/+$/, "").replace(/^\/*/, "/");
+const normalizePathname = (pathname?: string): string =>
+  (pathname || '/').replace(/\/+$/, "").replace(/^\/*/, "/");
 
 const normalizeSearch = (search: string): string =>
   !search || search === "?"

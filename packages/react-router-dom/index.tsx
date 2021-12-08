@@ -12,6 +12,7 @@ import {
   generatePath,
   matchRoutes,
   matchPath,
+  parseLocation,
   resolvePath,
   renderMatches,
   useHref,
@@ -61,6 +62,7 @@ export {
   generatePath,
   matchRoutes,
   matchPath,
+  parseLocation,
   renderMatches,
   resolvePath,
   useHref,
@@ -72,7 +74,8 @@ export {
   useOutlet,
   useParams,
   useResolvedPath,
-  useRoutes
+  useRoutes,
+  useTrimPathname
 };
 
 export type {
@@ -179,7 +182,7 @@ export function useTrimRootLocation(basename: string) {
 
   let trimPathname = useTrimPathname(basename);
 
-  function trimRoot({action, location}) {
+  function trimRoot({action, location} : HashState) {
     let isRoot = location.pathname === "/"
     let trimLocation = isRoot ? trimPathname(location) : location
     return {action, location: trimLocation}
@@ -200,7 +203,7 @@ export function useHashState(basename: string, history: HashHistory) {
     location: history.location
   }));
 
-  let setTrimState = (v) => setState(trimRootLocation(v))
+  let setTrimState = (v: HashState) => setState(trimRootLocation(v))
   return [state, setTrimState] as [HashState, Dispatch<HashState>]
 }
 
@@ -209,7 +212,7 @@ export function useHashState(basename: string, history: HashHistory) {
  * A <Router> for use in web browsers. Stores the location in the hash
  * portion of the URL so it is not sent to the server.
  */
-export function HashRouter({ basename, children, window }: HashRouterProps) {
+export function HashRouter({ basename = "/", children, window }: HashRouterProps) {
   let historyRef = React.useRef<HashHistory>();
   if (historyRef.current == null) {
     historyRef.current = createHashHistory({ window });
@@ -260,6 +263,10 @@ export function HistoryRouter({
   );
 }
 
+if (__DEV__) {
+  HistoryRouter.displayName = "HistoryRouter";
+}
+
 function isModifiedEvent(event: React.MouseEvent) {
   return !!(event.metaKey || event.altKey || event.ctrlKey || event.shiftKey);
 }
@@ -304,6 +311,10 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
   }
 );
 
+if (__DEV__) {
+  Link.displayName = "Link";
+}
+
 export interface NavLinkProps extends Omit<LinkProps, "className" | "style"> {
   caseSensitive?: boolean;
   className?: string | ((props: { isActive: boolean }) => string);
@@ -347,9 +358,19 @@ export const NavLink = React.forwardRef<HTMLAnchorElement, NavLinkProps>(
 
     let ariaCurrent = isActive ? ariaCurrentProp : undefined;
 
-    let className = [classNameProp, isActive ? "active" : null]
+    let className: string;
+    if (typeof classNameProp === "function") {
+      className = classNameProp({ isActive });
+    } else {
+      // If the className prop is not a function, we use a default `active`
+      // class for <NavLink />s that are active. In v5 `active` was the default
+      // value for `activeClassName`, but we are removing that API and can still
+      // use the old default behavior for a cleaner upgrade path and keep the
+      // simple styling rules working as they currently do.
+      className = [classNameProp, isActive ? "active" : null]
         .filter(Boolean)
         .join(" ");
+    }
 
     let style =
       typeof styleProp === "function" ? styleProp({ isActive }) : styleProp;
@@ -366,6 +387,10 @@ export const NavLink = React.forwardRef<HTMLAnchorElement, NavLinkProps>(
     );
   }
 );
+
+if (__DEV__) {
+  NavLink.displayName = "NavLink";
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // HOOKS
