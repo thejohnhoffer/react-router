@@ -1,6 +1,6 @@
 {
   "name": "react-router-dom-noslash",
-  "version": "6.1.0-noslash.5.0",
+  "version": "6.1.0-noslash.5.1",
   "author": "Remix Software <hello@remix.run>",
   "description": "Declarative routing for React web applications",
   "repository": {
@@ -15,7 +15,7 @@
   "unpkg": "./umd/react-router-dom-noslash.production.min.js",
   "dependencies": {
     "history": "^5.1.0",
-    "react-router-noslash": "6.1.0-noslash.5.0"
+    "react-router-noslash": "6.1.0-noslash.5.1"
   },
   "peerDependencies": {
     "react": ">=16.8",

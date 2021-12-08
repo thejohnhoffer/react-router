@@ -7472,14 +7472,14 @@ __metadata:
   dependencies:
     history: ^5.1.0
     react: ^17.0.2
-    react-router-noslash: 6.1.0-noslash.5.0
+    react-router-noslash: 6.1.0-noslash.5.1
   peerDependencies:
     react: ">=16.8"
     react-dom: ">=16.8"
   languageName: unknown
   linkType: soft
 
-"react-router-noslash@6.1.0-noslash.5.0, react-router-noslash@workspace:packages/react-router":
+"react-router-noslash@6.1.0-noslash.5.1, react-router-noslash@workspace:packages/react-router":
   version: 0.0.0-use.local
   resolution: "react-router-noslash@workspace:packages/react-router"
   dependencies:
