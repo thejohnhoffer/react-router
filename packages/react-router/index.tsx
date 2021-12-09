@@ -62,15 +62,9 @@ export type Navigator = Omit<
   "action" | "location" | "back" | "forward" | "listen" | "block"
 >;
 
-interface TrimPathname {
-  (location: Location): Location;
-  (path: Path): Path;
-}
-
 interface NavigationContextObject {
   basename: string;
   navigator: Navigator;
-  trimPathname: TrimPathname;
   static: boolean;
 }
 
@@ -264,8 +258,8 @@ export function Router({
   let navigator = useNavigator(navigatorProp, basenameProp);
   let basename = normalizePathname(basenameProp);
   let navigationContext = React.useMemo(
-    () => ({ basename, trimPathname, navigator, static: staticProp }),
-    [basename, trimPathname, navigator, staticProp]
+    () => ({ basename, navigator, static: staticProp }),
+    [basename, navigator, staticProp]
   );
 
   if (typeof locationProp === "string") {
@@ -349,7 +343,7 @@ export function useHref(to: To): string {
     `useHref() may be used only in the context of a <Router> component.`
   );
 
-  let { basename, trimPathname, navigator } = React.useContext(NavigationContext);
+  let { basename, navigator } = React.useContext(NavigationContext);
   let { hash, pathname, search } = useResolvedPath(to);
 
   let joinedPathname = pathname;
@@ -362,8 +356,7 @@ export function useHref(to: To): string {
         : joinPaths([basename, pathname]);
   }
 
-  let navPath = trimPathname({ pathname: joinedPathname, search, hash })
-  return navigator.createHref(navPath);
+  return navigator.createHref({ pathname: joinedPathname, search, hash });
 }
 
 /**
@@ -494,7 +487,7 @@ export function useNavigate(): NavigateFunction {
     `useNavigate() may be used only in the context of a <Router> component.`
   );
 
-  let { basename, trimPathname, navigator } = React.useContext(NavigationContext);
+  let { basename, navigator } = React.useContext(NavigationContext);
   let { matches } = React.useContext(RouteContext);
   let { pathname: locationPathname } = useLocation();
 
@@ -533,7 +526,7 @@ export function useNavigate(): NavigateFunction {
       }
 
       (!!options.replace ? navigator.replace : navigator.push)(
-        trimPathname(path),
+        path,
         options.state
       );
     },
@@ -1268,7 +1261,6 @@ function getToPathname(to: To): string | undefined {
 }
 
 function stripBasename(pathname: string, basename: string): string | null {
-
   if (basename === "/") return pathname;
 
   if (!pathname.toLowerCase().startsWith(basename.toLowerCase())) {

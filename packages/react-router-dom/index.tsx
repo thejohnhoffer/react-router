@@ -1,5 +1,5 @@
 import * as React from "react";
-import type { BrowserHistory, HashHistory, History, Location, Action } from "history";
+import type { BrowserHistory, HashHistory, History } from "history";
 import { createBrowserHistory, createHashHistory, createPath } from "history";
 import {
   MemoryRouter,
@@ -25,8 +25,7 @@ import {
   useOutlet,
   useParams,
   useResolvedPath,
-  useRoutes,
-  useTrimPathname
+  useRoutes
 } from "react-router-noslash";
 import type { To } from "react-router-noslash";
 
@@ -76,8 +75,7 @@ export {
   useOutlet,
   useParams,
   useResolvedPath,
-  useRoutes,
-  useTrimPathname
+  useRoutes
 };
 
 export type {
@@ -171,45 +169,6 @@ export interface HashRouterProps {
   window?: Window;
 }
 
-type Dispatch<T> = (t: T) => void;
-export interface HashState {
-  action: Action,
-  location: Location
-}
-
-/**
- * Returns a function to allow empty pathname in Location
- */
-export function useTrimRootLocation(basename: string) {
-
-  let trimPathname = useTrimPathname(basename);
-
-  function trimRoot({action, location} : HashState) {
-    let isRoot = location.pathname === "/"
-    let trimLocation = isRoot ? trimPathname(location) : location
-    return {action, location: trimLocation}
-  };
-
-  return trimRoot;
-}
-
-/**
- * Returns a modified history to allow empty pathname in Location
- */
-export function useHashState(basename: string, history: HashHistory) {
-
-  let trimRootLocation = useTrimRootLocation(basename);
-
-  let [state, setState] = React.useState(trimRootLocation({
-    action: history.action,
-    location: history.location
-  }));
-
-  let setTrimState = (v: HashState) => setState(trimRootLocation(v))
-  return [state, setTrimState] as [HashState, Dispatch<HashState>]
-}
-
-
 /**
  * A <Router> for use in web browsers. Stores the location in the hash
  * portion of the URL so it is not sent to the server.
@@ -221,7 +180,10 @@ export function HashRouter({ basename = "/", children, window }: HashRouterProps
   }
 
   let history = historyRef.current;
-  let [state, setState] = useHashState(basename, history)
+  let [state, setState] = React.useState({
+    action: history.action,
+    location: history.location
+  });
 
   React.useLayoutEffect(() => history.listen(setState), [history]);
 
