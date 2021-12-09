@@ -21,11 +21,11 @@ import {
   useMatch,
   useNavigate,
   useNavigationType,
+  useNavigator,
   useOutlet,
   useParams,
   useResolvedPath,
-  useRoutes,
-  useTrimPathname
+  useRoutes
 } from "react-router";
 import type { To } from "react-router";
 
@@ -71,11 +71,11 @@ export {
   useMatch,
   useNavigate,
   useNavigationType,
+  useNavigator,
   useOutlet,
   useParams,
   useResolvedPath,
-  useRoutes,
-  useTrimPathname
+  useRoutes
 };
 
 export type {

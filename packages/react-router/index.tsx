@@ -62,15 +62,9 @@ export type Navigator = Omit<
   "action" | "location" | "back" | "forward" | "listen" | "block"
 >;
 
-interface TrimPathname {
-  (location: Location): Location;
-  (path: Path): Path;
-}
-
 interface NavigationContextObject {
   basename: string;
   navigator: Navigator;
-  trimPathname: TrimPathname;
   static: boolean;
 }
 
@@ -264,7 +258,7 @@ export function Router({
   children = null,
   location: locationProp,
   navigationType = NavigationType.Pop,
-  navigator,
+  navigator: navigatorProp,
   static: staticProp = false
 }: RouterProps): React.ReactElement | null {
   invariant(
@@ -273,11 +267,11 @@ export function Router({
       ` You should never have more than one in your app.`
   );
 
-  let trimPathname = useTrimPathname(basenameProp);
+  let navigator = useNavigator(navigatorProp, basenameProp);
   let basename = normalizePathname(basenameProp);
   let navigationContext = React.useMemo(
-    () => ({ basename, trimPathname, navigator, static: staticProp }),
-    [basename, trimPathname, navigator, staticProp]
+    () => ({ basename, navigator, static: staticProp }),
+    [basename, navigator, staticProp]
   );
 
   if (typeof locationProp === "string") {
@@ -361,7 +355,7 @@ export function useHref(to: To): string {
     `useHref() may be used only in the context of a <Router> component.`
   );
 
-  let { basename, trimPathname, navigator } = React.useContext(NavigationContext);
+  let { basename, navigator } = React.useContext(NavigationContext);
   let { hash, pathname, search } = useResolvedPath(to);
 
   let joinedPathname = pathname;
@@ -374,8 +368,7 @@ export function useHref(to: To): string {
         : joinPaths([basename, pathname]);
   }
 
-  let navPath = trimPathname({ pathname: joinedPathname, search, hash })
-  return navigator.createHref(navPath);
+  return navigator.createHref({ pathname: joinedPathname, search, hash });
 }
 
 /**
@@ -420,16 +413,32 @@ export function parseLocation({pathname = "/", ...rest}: Partial<Location>): Loc
 }
 
 /**
- * Returns a function to remove leading slash from relative Path or Location
+ * Returns a modified navigator to allow relative pathnames
  */
-export function useTrimPathname(basenameProp: string): TrimPathname {
-  function trim({pathname, ...rest}: Path): Path;
-  function trim({pathname, ...rest}: Location): Location;
-  function trim({pathname, ...rest}: Record<string, any>): Record<string, any> {
-    let isRelative = basenameProp === "";
-    return {...rest, pathname: isRelative? pathname.slice(1) : pathname}
+export function useNavigator(navigator: Navigator, basename: string): Navigator {
+  if (basename !== "") {
+    return navigator
   }
-  return trim
+
+  const makeRelative = (path: Path): Path => {
+    return {
+      ...path, pathname: path.pathname.replace(/^\//, "")
+    }
+  }
+  const push = (to: To, state?: any): void => {
+    navigator.push(makeRelative(resolvePath(to)), state)
+  }
+  const replace = (to: To, state?: any): void => {
+    navigator.replace(makeRelative(resolvePath(to)), state)
+  }
+  const createHref = (to: To): string => {
+    return navigator.createHref(makeRelative(resolvePath(to)))
+  }
+
+  return {
+    go: navigator.go,
+    push, replace, createHref
+  }
 }
 
 /**
@@ -490,7 +499,7 @@ export function useNavigate(): NavigateFunction {
     `useNavigate() may be used only in the context of a <Router> component.`
   );
 
-  let { basename, trimPathname, navigator } = React.useContext(NavigationContext);
+  let { basename, navigator } = React.useContext(NavigationContext);
   let { matches } = React.useContext(RouteContext);
   let { pathname: locationPathname } = useLocation();
 
@@ -529,7 +538,7 @@ export function useNavigate(): NavigateFunction {
       }
 
       (!!options.replace ? navigator.replace : navigator.push)(
-        trimPathname(path),
+        path,
         options.state
       );
     },
@@ -1313,7 +1322,6 @@ function getToPathname(to: To): string | undefined {
 }
 
 function stripBasename(pathname: string, basename: string): string | null {
-
   if (basename === "/") return pathname;
 
   if (!pathname.toLowerCase().startsWith(basename.toLowerCase())) {
