@@ -469,10 +469,7 @@ function reactRouterDom() {
 }
 
 export default function rollup(options) {
-  let builds = [
-    ...reactRouter(options),
-    ...reactRouterDom(options)
-  ];
+  let builds = [...reactRouter(options), ...reactRouterDom(options)];
 
   return builds;
 }

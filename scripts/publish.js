@@ -59,7 +59,6 @@ function publishBuild(packageName, tag) {
  */
 async function run() {
   try {
-
     // 1. Get the current tag, which has the release version number
     let version = getTaggedVersion();
     invariant(
