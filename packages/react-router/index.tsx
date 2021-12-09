@@ -278,9 +278,7 @@ export function Router({
     locationProp = parsePath(locationProp);
   }
 
-  let {
-    pathname, search, hash, state, key
-  } = parseLocation(locationProp)
+  let { pathname, search, hash, state, key } = parseLocation(locationProp);
 
   let location = React.useMemo(() => {
     let trailingPathname = stripBasename(pathname, basename);
@@ -404,41 +402,57 @@ export function useLocation(): Location {
 /**
  * Returns a complete Location with an absolute pathname
  */
-export function parseLocation({pathname = "/", ...rest}: Partial<Location>): Location {
+export function parseLocation({
+  pathname = "/",
+  ...rest
+}: Partial<Location>): Location {
   const defaultLocation = {
-    pathname: "/", search: "", hash: "",
-    state: null, key: "default",
-  }
-  return {...defaultLocation, ...rest, pathname: normalizePathnameStart(pathname)}
+    pathname: "/",
+    search: "",
+    hash: "",
+    state: null,
+    key: "default"
+  };
+  return {
+    ...defaultLocation,
+    ...rest,
+    pathname: normalizePathnameStart(pathname)
+  };
 }
 
 /**
  * Returns a modified navigator to allow relative pathnames
  */
-export function useNavigator(navigator: Navigator, basename: string): Navigator {
+export function useNavigator(
+  navigator: Navigator,
+  basename: string
+): Navigator {
   if (basename !== "") {
-    return navigator
+    return navigator;
   }
 
   const makeRelative = (path: Path): Path => {
     return {
-      ...path, pathname: path.pathname.replace(/^\//, "")
-    }
-  }
+      ...path,
+      pathname: path.pathname.replace(/^\//, "")
+    };
+  };
   const push = (to: To, state?: any): void => {
-    navigator.push(makeRelative(resolvePath(to)), state)
-  }
+    navigator.push(makeRelative(resolvePath(to)), state);
+  };
   const replace = (to: To, state?: any): void => {
-    navigator.replace(makeRelative(resolvePath(to)), state)
-  }
+    navigator.replace(makeRelative(resolvePath(to)), state);
+  };
   const createHref = (to: To): string => {
-    return navigator.createHref(makeRelative(resolvePath(to)))
-  }
+    return navigator.createHref(makeRelative(resolvePath(to)));
+  };
 
   return {
     go: navigator.go,
-    push, replace, createHref
-  }
+    push,
+    replace,
+    createHref
+  };
 }
 
 /**

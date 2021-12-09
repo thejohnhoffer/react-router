@@ -32,7 +32,7 @@ import {
   useOutlet,
   useParams,
   useResolvedPath,
-  useRoutes,
+  useRoutes
 } from "react-router";
 import type { To } from "react-router";
 
