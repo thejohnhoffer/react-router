@@ -2778,9 +2778,9 @@ camelcase@^6.0.0:
   integrity sha512-tVI4q5jjFV5CavAU8DXfza/TJcZutVKo/5Foskmsqcm0MsL91moHvwiGNnqaa2o6PF/7yT5ikDRcVcl8Rj6LCA==
 
 caniuse-lite@^1.0.30001280:
-  version "1.0.30001285"
-  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001285.tgz#fe1e52229187e11d6670590790d669b9e03315b7"
-  integrity sha512-KAOkuUtcQ901MtmvxfKD+ODHH9YVDYnBt+TGYSz2KIfnq22CiArbUxXPN9067gNbgMlnNYRSwho8OPXZPALB9Q==
+  version "1.0.30001286"
+  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001286.tgz#3e9debad420419618cfdf52dc9b6572b28a8fff6"
+  integrity sha512-zaEMRH6xg8ESMi2eQ3R4eZ5qw/hJiVsO/HlLwniIwErij0JDr9P+8V4dtx1l+kLq6j3yy8l8W4fst1lBnat5wQ==
 
 capture-exit@^2.0.0:
   version "2.0.0"
@@ -3443,9 +3443,9 @@ ee-first@1.1.1:
   integrity sha1-WQxhFWsK4vTwJVcyoViyZrxWsh0=
 
 electron-to-chromium@^1.3.896:
-  version "1.4.13"
-  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.13.tgz#6b8a21a71c6f30b4a4def54d3afe94e0ddbc58b3"
-  integrity sha512-ih5tIhzEuf78pBY70FXLo+Pw73R5MPPPcXb4CGBMJaCQt/qo/IGIesKXmswpemVCKSE2Bulr5FslUv7gAWJoOw==
+  version "1.4.14"
+  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.14.tgz#b0aa41fbfbf2eff8c2c6f7a871c03075250f8956"
+  integrity sha512-RsGkAN9JEAYMObS72kzUsPPcPGMqX1rBqGuXi9aa4TBKLzICoLf+DAAtd0fVFzrniJqYzpby47gthCUoObfs0Q==
 
 emittery@^0.7.1:
   version "0.7.2"
@@ -3660,9 +3660,9 @@ eslint-plugin-jsx-a11y@^6.4.1:
     minimatch "^3.0.4"
 
 eslint-plugin-react-hooks@next:
-  version "4.2.1-beta-c7917fe76-20211206"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-react-hooks/-/eslint-plugin-react-hooks-4.2.1-beta-c7917fe76-20211206.tgz#f5e3c6edf52f36f5438c58548a32d97e58c8d7b5"
-  integrity sha512-p7elCDbCHL/9tBjSmTgV6Ehy0d1+oY5dzYbDfcd2D8o+XF20EF1T8xM+z/ZwN2RcWwY+pFNuq1jVeVOWJpwi1g==
+  version "4.2.1-rc.0-next-f2a59df48-20211208"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-react-hooks/-/eslint-plugin-react-hooks-4.2.1-rc.0-next-f2a59df48-20211208.tgz#03e30b6dbdf1bf95fa29a679797c1c2809b4b035"
+  integrity sha512-MGhGrAENxXz3HiJIz5YrZaJY7ZWxFrejWmcWZAwusD+VAF356wB88A0AWj3M4oG0WJTwbQaZx6hRpfx5XJ7imw==
 
 eslint-plugin-react@^7.24.0:
   version "7.27.1"

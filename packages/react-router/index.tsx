@@ -411,12 +411,12 @@ export function useLocation(): Location {
 /**
  * Returns a complete Location with an absolute pathname
  */
-export function parseLocation({pathname, ...rest}: Partial<Location>): Location {
+export function parseLocation({pathname = "/", ...rest}: Partial<Location>): Location {
   const defaultLocation = {
     pathname: "/", search: "", hash: "",
     state: null, key: "default",
   }
-  return {...defaultLocation, ...rest, pathname: fromRelative(pathname)}
+  return {...defaultLocation, ...rest, pathname: normalizePathnameStart(pathname)}
 }
 
 /**
@@ -1332,11 +1332,11 @@ function stripBasename(pathname: string, basename: string): string | null {
 const joinPaths = (paths: string[]): string =>
   paths.join("/").replace(/\/\/+/g, "/");
 
-const fromRelative = (pathname?: string): string =>
-  (pathname || '/').replace(/^\/*/, "/");
+const normalizePathnameStart = (pathname: string): string =>
+  pathname.replace(/^\/*/, "/");
 
-const normalizePathname = (pathname?: string): string =>
-  (pathname || '/').replace(/\/+$/, "").replace(/^\/*/, "/");
+const normalizePathname = (pathname: string): string =>
+  normalizePathnameStart(pathname.replace(/\/+$/, ""));
 
 const normalizeSearch = (search: string): string =>
   !search || search === "?"
