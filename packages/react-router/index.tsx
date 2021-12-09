@@ -633,7 +633,6 @@ export function useRoutes(
   let parentPathname = routeMatch ? routeMatch.pathname : "/";
   let parentPathnameBase = routeMatch ? routeMatch.pathnameBase : "/";
   let parentRoute = routeMatch && routeMatch.route;
-
   let locationFromContext = useLocation();
 
   let location;
