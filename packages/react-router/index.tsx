@@ -252,7 +252,7 @@ export function Router({
   children = null,
   location: locationProp,
   navigationType = NavigationType.Pop,
-  navigator,
+  navigator: navigatorProp,
   static: staticProp = false
 }: RouterProps): React.ReactElement | null {
   invariant(
@@ -261,7 +261,7 @@ export function Router({
       ` You should never have more than one in your app.`
   );
 
-  let trimPathname = useTrimPathname(basenameProp);
+  let navigator = useNavigator(navigatorProp, basenameProp);
   let basename = normalizePathname(basenameProp);
   let navigationContext = React.useMemo(
     () => ({ basename, trimPathname, navigator, static: staticProp }),
@@ -399,25 +399,41 @@ export function useLocation(): Location {
 /**
  * Returns a complete Location with an absolute pathname
  */
-export function parseLocation({pathname, ...rest}: Partial<Location>): Location {
+export function parseLocation({pathname = "/", ...rest}: Partial<Location>): Location {
   const defaultLocation = {
     pathname: "/", search: "", hash: "",
     state: null, key: "default",
   }
-  return {...defaultLocation, ...rest, pathname: fromRelative(pathname)}
+  return {...defaultLocation, ...rest, pathname: normalizePathnameStart(pathname)}
 }
 
 /**
- * Returns a function to remove leading slash from relative Path or Location
+ * Returns a modified navigator to allow relative pathnames
  */
-export function useTrimPathname(basenameProp: string): TrimPathname {
-  function trim({pathname, ...rest}: Path): Path;
-  function trim({pathname, ...rest}: Location): Location;
-  function trim({pathname, ...rest}: Record<string, any>): Record<string, any> {
-    let isRelative = basenameProp === "";
-    return {...rest, pathname: isRelative? pathname.slice(1) : pathname}
+export function useNavigator(navigator: Navigator, basename: string): Navigator {
+  if (basename !== "") {
+    return navigator
   }
-  return trim
+
+  const makeRelative = (path: Path): Path => {
+    return {
+      ...path, pathname: path.pathname.replace(/^\//, "")
+    }
+  }
+  const push = (to: To, state?: any): void => {
+    navigator.push(makeRelative(resolvePath(to)), state)
+  }
+  const replace = (to: To, state?: any): void => {
+    navigator.replace(makeRelative(resolvePath(to)), state)
+  }
+  const createHref = (to: To): string => {
+    return navigator.createHref(makeRelative(resolvePath(to)))
+  }
+
+  return {
+    go: navigator.go,
+    push, replace, createHref
+  }
 }
 
 /**
@@ -1271,11 +1287,11 @@ function stripBasename(pathname: string, basename: string): string | null {
 const joinPaths = (paths: string[]): string =>
   paths.join("/").replace(/\/\/+/g, "/");
 
-const fromRelative = (pathname?: string): string =>
-  (pathname || '/').replace(/^\/*/, "/");
+const normalizePathnameStart = (pathname: string): string =>
+  pathname.replace(/^\/*/, "/");
 
-const normalizePathname = (pathname?: string): string =>
-  (pathname || '/').replace(/\/+$/, "").replace(/^\/*/, "/");
+const normalizePathname = (pathname: string): string =>
+  normalizePathnameStart(pathname.replace(/\/+$/, ""));
 
 const normalizeSearch = (search: string): string =>
   !search || search === "?"
