@@ -1,6 +1,6 @@
 import * as React from "react";
-import type { BrowserHistory, HashHistory, History } from "history";
-import { createBrowserHistory, createHashHistory, createPath } from "history";
+import type { BrowserHistory, HashHistory, History } from "history-noslash";
+import { createBrowserHistory, createHashHistory, createPath } from "history-noslash";
 import {
   MemoryRouter,
   Navigate,
@@ -21,7 +21,6 @@ import {
   useMatch,
   useNavigate,
   useNavigationType,
-  useNavigator,
   useOutlet,
   useParams,
   useResolvedPath,
@@ -71,7 +70,6 @@ export {
   useMatch,
   useNavigate,
   useNavigationType,
-  useNavigator,
   useOutlet,
   useParams,
   useResolvedPath,
@@ -179,8 +177,9 @@ export function HashRouter({
   window
 }: HashRouterProps) {
   let historyRef = React.useRef<HashHistory>();
+  let hashRoot = basename === "" ? "" : "/"
   if (historyRef.current == null) {
-    historyRef.current = createHashHistory({ window });
+    historyRef.current = createHashHistory({ window, hashRoot });
   }
 
   let history = historyRef.current;

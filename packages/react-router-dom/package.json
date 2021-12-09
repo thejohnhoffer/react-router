@@ -14,7 +14,7 @@
   "types": "./index.d.ts",
   "unpkg": "./umd/react-router-dom-noslash.production.min.js",
   "dependencies": {
-    "history": "^5.1.0",
+    "history-noslash": "^5.2.0-noslash.2.0",
     "react-router-noslash": "6.1.0-noslash.7.2"
   },
   "peerDependencies": {
