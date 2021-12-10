@@ -451,10 +451,6 @@ type ParamParseKey<Segment extends string> =
     : string;
 
 /**
- * Returns a complete Location with an absolute pathname
- */
-
-/**
  * Returns the current navigation action which describes how the router came to
  * the current location, either by a pop, push, or replace on the history stack.
  *
