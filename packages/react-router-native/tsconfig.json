@@ -10,12 +10,7 @@
     "strict": true,
     "jsx": "react",
 
-    "declaration": true,
-    "emitDeclarationOnly": true,
-
     "skipLibCheck": true,
-
-    "outDir": "../../build/node_modules/react-router-native",
-    "rootDir": "."
+    "outDir": "build"
   }
 }
