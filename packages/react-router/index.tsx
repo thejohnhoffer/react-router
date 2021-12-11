@@ -1,4 +1,5 @@
 import * as React from "react";
+export { parsePath, createPath } from "history";
 import type {
   History,
   InitialEntry,
