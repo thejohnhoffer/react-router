@@ -15,10 +15,12 @@ import {
   Route,
   Router,
   Routes,
+  createPath,
   createRoutesFromChildren,
   generatePath,
   matchRoutes,
   matchPath,
+  parsePath,
   resolvePath,
   renderMatches,
   useHref,
@@ -33,7 +35,7 @@ import {
   useRoutes,
   useOutletContext
 } from "react-router";
-import type { To } from "react-router";
+import type { To, PartialPath } from "react-router";
 
 import URLSearchParams from "@ungap/url-search-params";
 
@@ -50,9 +52,11 @@ export {
   Router,
   Routes,
   createRoutesFromChildren,
+  createPath,
   generatePath,
   matchRoutes,
   matchPath,
+  parsePath,
   resolvePath,
   renderMatches,
   useHref,
@@ -88,6 +92,7 @@ export type {
   RouteProps,
   RouterProps,
   RoutesProps,
+  PartialPath,
   To
 } from "react-router";
 

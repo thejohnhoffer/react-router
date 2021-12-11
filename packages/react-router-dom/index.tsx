@@ -1,6 +1,6 @@
 import * as React from "react";
 import type { BrowserHistory, HashHistory, History } from "history";
-import { createBrowserHistory, createHashHistory, createPath } from "history";
+import { createBrowserHistory, createHashHistory } from "history";
 import {
   MemoryRouter,
   Navigate,
@@ -8,10 +8,12 @@ import {
   Route,
   Router,
   Routes,
+  createPath,
   createRoutesFromChildren,
   generatePath,
   matchRoutes,
   matchPath,
+  parsePath,
   resolvePath,
   renderMatches,
   useHref,
@@ -26,7 +28,7 @@ import {
   useRoutes,
   useOutletContext
 } from "react-router";
-import type { To } from "react-router";
+import type { To, PartialPath } from "react-router";
 
 function warning(cond: boolean, message: string): void {
   if (!cond) {
@@ -58,9 +60,11 @@ export {
   Router,
   Routes,
   createRoutesFromChildren,
+  createPath,
   generatePath,
   matchRoutes,
   matchPath,
+  parsePath,
   renderMatches,
   resolvePath,
   useHref,
@@ -80,6 +84,7 @@ export type {
   Location,
   Path,
   To,
+  PartialPath,
   NavigationType,
   MemoryRouterProps,
   NavigateFunction,

@@ -1,9 +1,11 @@
 import * as React from "react";
+export { parsePath, createPath } from "history";
 import type {
   History,
   InitialEntry,
   Location,
   MemoryHistory,
+  PartialPath,
   Path,
   To
 } from "history";
@@ -13,7 +15,7 @@ import {
   parsePath
 } from "history";
 
-export type { Location, Path, To, NavigationType };
+export type { Location, Path, To, PartialPath, NavigationType };
 
 function invariant(cond: any, message: string): asserts cond {
   if (!cond) throw new Error(message);
